@@ -6,10 +6,17 @@ possible as the real thing.
 
 Usage example:
 ```bash
-$ tmpolx -N 0-1 -P restricted \
+$ tmpolx -J -N 0-1 -P restricted \
 	'{"R":"cpu", "H":[{"M":"01","P":true},{"M":"10","P":true},{"M":"11","P":false}]}' \
 	'{"R":"nvidia.com/gpu", "H":[{"M":"01","P":true},{"M":"11","P":false}]}' \
 	'{"R":"openshift.io/intelsriov", "H":[{"M":"10","P":true},{"M":"11","P":false}]}'
+{restricted: map[cpu:[{01 true} {10 true} {11 false}] nvidia.com/gpu:[{01 true} {11 false}] openshift.io/intelsriov:[{10 true} {11 false}]]}
+admit=false hint={01 false}
+$
+$ tmpolx -v=5 -N 0-1 -P restricted \
+	'nvidia.com/gpu:[{01 true} {11 false}]' \
+	'openshift.io/intelsriov:[{10 true} {11 false}]' \
+	'cpu:[{01 true} {10 true} {11 false}]'
 {restricted: map[cpu:[{01 true} {10 true} {11 false}] nvidia.com/gpu:[{01 true} {11 false}] openshift.io/intelsriov:[{10 true} {11 false}]]}
 admit=false hint={01 false}
 $
@@ -31,7 +38,13 @@ $
 }
 ```
 
-### Translation example
+`tmpolx` accepts topology manager hints both in native go format (just copy/paste them from the kubelet logs) or in JSON format.
+The go format is handier and simpler to use, but the support is still experimental. The JSON format is recommended to get
+the maximum safety. The default is to use the go format.
+
+### Topology Hints in JSON format
+
+Use the `-J` flag to enable this format.
 
 ```bash
 cpu:[{01 true} {10 true} {11 false}]
