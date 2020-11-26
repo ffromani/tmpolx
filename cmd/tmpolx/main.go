@@ -20,19 +20,26 @@ import (
 	"fmt"
 	"os"
 
-	flag "github.com/spf13/pflag"
+	"flag"
+	"github.com/spf13/pflag"
 
+	"k8s.io/klog/v2"
 	"k8s.io/kubernetes/pkg/kubelet/cm/cpuset"
 
 	"github.com/fromanirh/tmpolx/pkg/tmpolx"
 )
 
 func main() {
+	// Add klog flags
+	klog.InitFlags(flag.CommandLine)
+	// Add flags registered by imported packages
+	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+
 	var numaNodes string
 	var policyName string
-	flag.StringVarP(&numaNodes, "numa", "N", "0-7", "set NUMA configuration")
-	flag.StringVarP(&policyName, "policy", "P", "none", "set Topology manager Policy")
-	flag.Parse()
+	pflag.StringVarP(&numaNodes, "numa", "N", "0-7", "set NUMA configuration")
+	pflag.StringVarP(&policyName, "policy", "P", "none", "set Topology manager Policy")
+	pflag.Parse()
 
 	numaConf, err := cpuset.Parse(numaNodes)
 	if err != nil {
@@ -43,7 +50,7 @@ func main() {
 	params := tmpolx.Params{
 		PolicyName: policyName,
 		NUMANodes:  numaConf.ToSlice(),
-		RawHints:   flag.Args(),
+		RawHints:   pflag.Args(),
 	}
 
 	tmpx, err := tmpolx.NewFromParams(params)
