@@ -1,4 +1,4 @@
-# TMPolX: Topology ManagerPolicy eXploration tool
+# TMPolX: Topology Manager Policy eXploration tool
 
 A simple tool to test how kubernetes' topology manager behave, without need to run the real workload.
 This tool uses the very same packages from upstream kubernetes, to give the closest representation as
@@ -13,6 +13,57 @@ $ tmpolx -N 0-1 -P restricted \
 {restricted: map[cpu:[{01 true} {10 true} {11 false}] nvidia.com/gpu:[{01 true} {11 false}] openshift.io/intelsriov:[{10 true} {11 false}]]}
 admit=false hint={01 false}
 $
+```
+
+## Command line explanation
+
+`tmpolx` expects to receive positional arguments which represent the topology manager hints.
+```json
+{
+	"R": "something", # resource name
+	"H": [
+		# array of hints
+		{
+			"M": "1111", # bitmask
+			"P": true    # preferred flag
+		}
+	]
+}
+```
+
+### Translation example
+
+```bash
+cpu:[{01 true} {10 true} {11 false}]
+```
+is
+```
+resource = "cpu"
+hints = 
+	{01 true}
+	{10 true}
+	{11 false}
+# each hint is {mask preferred}
+```
+so we get
+```json
+{
+	"R": "cpu",
+	 "H":[
+		{
+			"M": "01",
+			"P": true
+		},
+		{
+			"M": "10",
+			"P": true
+		},
+		{
+			"M": "11",
+			"P": false
+		}
+	]
+}
 ```
 
 ## license
