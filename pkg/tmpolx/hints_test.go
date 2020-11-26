@@ -23,21 +23,47 @@ import (
 	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
 )
 
-func TestParseHints(t *testing.T) {
-	rawHints := []string{
-		// cpu:[{01 true} {10 true} {11 false}]
-		`{"R":"cpu", "H":[{"M":"01","P":true},{"M":"10","P":true},{"M":"11","P":false}]}`,
-		// nvidia.com/gpu:[{01 true} {11 false}]
-		`{"R":"nvidia.com/gpu", "H":[{"M":"01","P":true},{"M":"11","P":false}]}`,
-		// openshift.io/intelsriov:[{10 true} {11 false}]
-		`{"R":"openshift.io/intelsriov", "H":[{"M":"10","P":true},{"M":"11","P":false}]}`,
-	}
+var rawJSONHints []string = []string{
+	// cpu:[{01 true} {10 true} {11 false}]
+	`{"R":"cpu", "H":[{"M":"01","P":true},{"M":"10","P":true},{"M":"11","P":false}]}`,
+	// nvidia.com/gpu:[{01 true} {11 false}]
+	`{"R":"nvidia.com/gpu", "H":[{"M":"01","P":true},{"M":"11","P":false}]}`,
+	// openshift.io/intelsriov:[{10 true} {11 false}]
+	`{"R":"openshift.io/intelsriov", "H":[{"M":"10","P":true},{"M":"11","P":false}]}`,
+}
 
+var rawGOHints []string = []string{
+	"cpu:[{01 true} {10 true} {11 false}]",
+	"nvidia.com/gpu:[{01 true} {11 false}]",
+	"openshift.io/intelsriov:[{10 true} {11 false}]",
+}
+
+func TestParseJSONHints(t *testing.T) {
 	tmpx := &TMPolx{
 		hints: make(map[string][]topologymanager.TopologyHint),
 	}
-	err := tmpx.ParseHints(rawHints)
+	err := tmpx.ParseJSONHints(rawJSONHints)
 	if err != nil {
 		t.Errorf("failed to parse hints: %v", err)
+	}
+	s := fmt.Sprintf("%v", tmpx.GetHints("cpu"))
+	expected := "[{01 true} {10 true} {11 false}]"
+	if s != expected {
+		t.Errorf("got bad hints %v expected %v", s, expected)
+	}
+}
+
+func TestParseGOHints(t *testing.T) {
+	tmpx := &TMPolx{
+		hints: make(map[string][]topologymanager.TopologyHint),
+	}
+	err := tmpx.ParseGOHints(rawGOHints)
+	if err != nil {
+		t.Errorf("failed to parse hints: %v", err)
+	}
+	s := fmt.Sprintf("%v", tmpx.GetHints("cpu"))
+	expected := "[{01 true} {10 true} {11 false}]"
+	if s != expected {
+		t.Errorf("got bad hints %v expected %v", s, expected)
 	}
 }

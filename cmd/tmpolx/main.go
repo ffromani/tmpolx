@@ -37,8 +37,10 @@ func main() {
 
 	var numaNodes string
 	var policyName string
+	var useJSONHints bool
 	pflag.StringVarP(&numaNodes, "numa", "N", "0-7", "set NUMA configuration")
 	pflag.StringVarP(&policyName, "policy", "P", "none", "set Topology manager Policy")
+	pflag.BoolVarP(&useJSONHints, "json", "J", false, "interpret hints as JSON")
 	pflag.Parse()
 
 	numaConf, err := cpuset.Parse(numaNodes)
@@ -48,14 +50,15 @@ func main() {
 	}
 
 	params := tmpolx.Params{
-		PolicyName: policyName,
-		NUMANodes:  numaConf.ToSlice(),
-		RawHints:   pflag.Args(),
+		PolicyName:   policyName,
+		NUMANodes:    numaConf.ToSlice(),
+		RawHints:     pflag.Args(),
+		UseJSONHints: useJSONHints,
 	}
 
 	tmpx, err := tmpolx.NewFromParams(params)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error creating TMPolx object: %v", err)
+		fmt.Fprintf(os.Stderr, "error creating TMPolx object: %v\n", err)
 		os.Exit(2)
 	}
 

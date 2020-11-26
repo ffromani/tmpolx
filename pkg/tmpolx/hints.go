@@ -18,6 +18,7 @@ package tmpolx
 
 import (
 	"encoding/json"
+	"strings"
 
 	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
 	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
@@ -47,7 +48,15 @@ func (ht Hint) ToTM() topologymanager.TopologyHint {
 	return tmht
 }
 
-func (tmpx *TMPolx) ParseHints(rawHints []string) error {
+func (tmpx *TMPolx) addHint(rh ResHints) {
+	hints := tmpx.hints[rh.Resource]
+	for _, ht := range rh.Hints {
+		hints = append(hints, ht.ToTM())
+	}
+	tmpx.hints[rh.Resource] = hints
+}
+
+func (tmpx *TMPolx) ParseJSONHints(rawHints []string) error {
 	var err error
 	for _, rawHint := range rawHints {
 		var rh ResHints
@@ -56,11 +65,28 @@ func (tmpx *TMPolx) ParseHints(rawHints []string) error {
 			return err
 		}
 
-		hints := tmpx.hints[rh.Resource]
-		for _, ht := range rh.Hints {
-			hints = append(hints, ht.ToTM())
+		tmpx.addHint(rh)
+	}
+	return nil
+}
+
+// cpu:[{01 true} {10 true} {11 false}]
+func (tmpx *TMPolx) ParseGOHints(rawHints []string) error {
+	for _, rawHint := range rawHints {
+		data := strings.SplitN(rawHint, ":", 2)
+		rh := ResHints{
+			Resource: strings.TrimSpace(data[0]),
 		}
-		tmpx.hints[rh.Resource] = hints
+		items := strings.Split(data[1], "} ")
+		for _, item := range items {
+			hintData := strings.SplitN(strings.Trim(item, "{}"), " ", 2)
+			rh.Hints = append(rh.Hints, Hint{
+				Mask:      hintData[0],
+				Preferred: hintData[1] == "true",
+			})
+		}
+
+		tmpx.addHint(rh)
 	}
 	return nil
 }

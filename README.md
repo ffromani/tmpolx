@@ -49,7 +49,7 @@ so we get
 ```json
 {
 	"R": "cpu",
-	 "H":[
+	"H":[
 		{
 			"M": "01",
 			"P": true

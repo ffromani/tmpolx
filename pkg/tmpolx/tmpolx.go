@@ -27,9 +27,10 @@ const (
 )
 
 type Params struct {
-	PolicyName string
-	NUMANodes  []int
-	RawHints   []string
+	PolicyName   string
+	NUMANodes    []int
+	RawHints     []string
+	UseJSONHints bool
 }
 
 type TMPolx struct {
@@ -65,8 +66,14 @@ func NewFromParams(params Params) (*TMPolx, error) {
 		policy: policy,
 		hints:  make(map[string][]topologymanager.TopologyHint),
 	}
-	if err := tmpx.ParseHints(params.RawHints); err != nil {
-		return nil, err
+	if params.UseJSONHints {
+		if err := tmpx.ParseJSONHints(params.RawHints); err != nil {
+			return nil, err
+		}
+	} else {
+		if err := tmpx.ParseGOHints(params.RawHints); err != nil {
+			return nil, err
+		}
 	}
 	return tmpx, nil
 }
