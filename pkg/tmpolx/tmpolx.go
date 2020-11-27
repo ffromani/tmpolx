@@ -40,52 +40,6 @@ type TMPolx struct {
 	hints  map[string][]topologymanager.TopologyHint
 }
 
-func NewFromParams(params Params) (*TMPolx, error) {
-	if len(params.NUMANodes) > MaxNUMANodes {
-		return nil, fmt.Errorf("TM currently supports up to %d NUMA nodes (got %d)", MaxNUMANodes, len(params.NUMANodes))
-	}
-
-	var policy topologymanager.Policy
-	switch params.PolicyName {
-
-	case topologymanager.PolicyNone:
-		policy = topologymanager.NewNonePolicy()
-
-	case topologymanager.PolicyBestEffort:
-		policy = topologymanager.NewBestEffortPolicy(params.NUMANodes)
-
-	case topologymanager.PolicyRestricted:
-		policy = topologymanager.NewRestrictedPolicy(params.NUMANodes)
-
-	case topologymanager.PolicySingleNumaNode:
-		policy = topologymanager.NewSingleNumaNodePolicy(params.NUMANodes)
-
-	default:
-		return nil, fmt.Errorf("unknown policy: %q", params.PolicyName)
-	}
-
-	tmpx := &TMPolx{
-		policy: policy,
-		hints:  make(map[string][]topologymanager.TopologyHint),
-	}
-	if params.UseJSONHints {
-		if err := tmpx.ParseJSONHints(params.RawHints); err != nil {
-			return nil, err
-		}
-	} else {
-		if err := tmpx.ParseGOHints(params.RawHints); err != nil {
-			return nil, err
-		}
-	}
-	return tmpx, nil
-}
-
-func (tmpx *TMPolx) Run() (string, bool) {
-	allHints := []map[string][]topologymanager.TopologyHint{tmpx.hints}
-	bestHint, admit := tmpx.policy.Merge(allHints)
-	return fmt.Sprintf("%v", bestHint), admit
-}
-
 func (tmpx *TMPolx) GetPolicyName() string {
 	return tmpx.policy.Name()
 }
