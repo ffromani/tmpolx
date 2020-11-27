@@ -62,7 +62,7 @@ func main() {
 		os.Exit(2)
 	}
 
-	fmt.Fprintf(os.Stderr, "%s\n", tmpx.String())
+	fmt.Fprintf(os.Stderr, "%s", tmpx.String())
 
 	bestHint, admit := tmpx.Run()
 	fmt.Printf("admit=%v hint=%v\n", admit, bestHint)

@@ -18,6 +18,8 @@ package tmpolx
 
 import (
 	"fmt"
+	"strings"
+	"text/tabwriter"
 
 	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
 )
@@ -97,5 +99,12 @@ func (tmpx *TMPolx) GetHints(resName string) []topologymanager.TopologyHint {
 }
 
 func (tmpx *TMPolx) String() string {
-	return fmt.Sprintf("{%s: %v}", tmpx.policy.Name(), tmpx.hints)
+	var buf strings.Builder
+	tw := tabwriter.NewWriter(&buf, 0, 8, 0, '\t', tabwriter.AlignRight)
+	fmt.Fprintf(tw, ".\tresource\thints\t\n")
+	for res, hints := range tmpx.hints {
+		fmt.Fprintf(tw, ".\t%s\t%v\t\n", res, hints)
+	}
+	tw.Flush()
+	return fmt.Sprintf("using policy %q\n%s", tmpx.policy.Name(), buf.String())
 }
