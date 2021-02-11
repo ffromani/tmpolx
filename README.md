@@ -94,3 +94,6 @@ just run
 ```bash
 make
 ```
+
+## see also
+similar tool to inspect cpumanager behaviour: https://github.com/fromanirh/cpumgrx
