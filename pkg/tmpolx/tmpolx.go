@@ -22,6 +22,8 @@ import (
 	"text/tabwriter"
 
 	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
+
+	"github.com/fromanirh/cpumgrx/pkg/tmutils"
 )
 
 const (
@@ -61,4 +63,53 @@ func (tmpx *TMPolx) String() string {
 	}
 	tw.Flush()
 	return fmt.Sprintf("using policy %q\n%s", tmpx.policy.Name(), buf.String())
+}
+
+func NewFromParams(params Params) (*TMPolx, error) {
+	if len(params.NUMANodes) > MaxNUMANodes {
+		return nil, fmt.Errorf("TM currently supports up to %d NUMA nodes (got %d)", MaxNUMANodes, len(params.NUMANodes))
+	}
+
+	var policy topologymanager.Policy
+	switch params.PolicyName {
+
+	case topologymanager.PolicyNone:
+		policy = topologymanager.NewNonePolicy()
+
+	case topologymanager.PolicyBestEffort:
+		policy = topologymanager.NewBestEffortPolicy(params.NUMANodes)
+
+	case topologymanager.PolicyRestricted:
+		policy = topologymanager.NewRestrictedPolicy(params.NUMANodes)
+
+	case topologymanager.PolicySingleNumaNode:
+		policy = topologymanager.NewSingleNumaNodePolicy(params.NUMANodes)
+
+	default:
+		return nil, fmt.Errorf("unknown policy: %q", params.PolicyName)
+	}
+
+	var err error
+	hints := make(map[string][]topologymanager.TopologyHint)
+	if params.UseJSONHints {
+		hints, err = tmutils.ParseJSONHints(params.RawHints)
+	} else {
+		hints, err = tmutils.ParseGOHints(params.RawHints)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	tmpx := &TMPolx{
+		hints:  hints,
+		policy: policy,
+	}
+	return tmpx, nil
+}
+
+func (tmpx *TMPolx) Run() (string, bool) {
+	allHints := []map[string][]topologymanager.TopologyHint{tmpx.hints}
+	bestHint, admit := tmpx.policy.Merge(allHints)
+	return fmt.Sprintf("%v", bestHint), admit
 }

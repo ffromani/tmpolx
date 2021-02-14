@@ -14,7 +14,7 @@
  * Copyright 2020 Red Hat, Inc.
  */
 
-package tmpolx
+package tmutils
 
 import (
 	"encoding/json"
@@ -48,30 +48,32 @@ func (ht Hint) ToTM() topologymanager.TopologyHint {
 	return tmht
 }
 
-func (tmpx *TMPolx) addHint(rh ResHints) {
-	hints := tmpx.hints[rh.Resource]
+func addHint(allHints map[string][]topologymanager.TopologyHint, rh ResHints) {
+	hints := allHints[rh.Resource]
 	for _, ht := range rh.Hints {
 		hints = append(hints, ht.ToTM())
 	}
-	tmpx.hints[rh.Resource] = hints
+	allHints[rh.Resource] = hints
 }
 
-func (tmpx *TMPolx) ParseJSONHints(rawHints []string) error {
+func ParseJSONHints(rawHints []string) (map[string][]topologymanager.TopologyHint, error) {
 	var err error
+	allHints := make(map[string][]topologymanager.TopologyHint)
 	for _, rawHint := range rawHints {
 		var rh ResHints
 		err = json.Unmarshal([]byte(rawHint), &rh)
 		if err != nil {
-			return err
+			return allHints, err
 		}
 
-		tmpx.addHint(rh)
+		addHint(allHints, rh)
 	}
-	return nil
+	return allHints, nil
 }
 
 // cpu:[{01 true} {10 true} {11 false}]
-func (tmpx *TMPolx) ParseGOHints(rawHints []string) error {
+func ParseGOHints(rawHints []string) (map[string][]topologymanager.TopologyHint, error) {
+	allHints := make(map[string][]topologymanager.TopologyHint)
 	for _, rawHint := range rawHints {
 		data := strings.SplitN(rawHint, ":", 2)
 		rh := ResHints{
@@ -86,7 +88,7 @@ func (tmpx *TMPolx) ParseGOHints(rawHints []string) error {
 			})
 		}
 
-		tmpx.addHint(rh)
+		addHint(allHints, rh)
 	}
-	return nil
+	return allHints, nil
 }

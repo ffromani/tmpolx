@@ -1,4 +1,4 @@
-module github.com/fromanirh/cpumgrx
+module github.com/fromanirh/tmpolx
 
 go 1.15
 
@@ -32,8 +32,7 @@ replace (
 )
 
 require (
-	github.com/fromanirh/tmpolx v0.0.2
-	github.com/google/cadvisor v0.38.7 // indirect
+	github.com/fromanirh/cpumgrx v0.0.3
 	github.com/spf13/pflag v1.0.5
 	k8s.io/klog/v2 v2.5.0
 	k8s.io/kubernetes v0.0.0-00010101000000-000000000000
