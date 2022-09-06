@@ -36,7 +36,7 @@ github.com/emicklei/go-restful/log
 # github.com/evanphx/json-patch v4.12.0+incompatible
 ## explicit
 github.com/evanphx/json-patch
-# github.com/fromanirh/cpumgrx v0.0.9
+# github.com/fromanirh/cpumgrx v0.0.10
 ## explicit; go 1.18
 github.com/fromanirh/cpumgrx/pkg/tmutils
 # github.com/go-logr/logr v1.2.0

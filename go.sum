@@ -197,8 +197,8 @@ github.com/form3tech-oss/jwt-go v3.2.2+incompatible/go.mod h1:pbq4aXjuKjdthFRnoD
 github.com/form3tech-oss/jwt-go v3.2.3+incompatible h1:7ZaBxOI7TMoYBfyA3cQHErNNyAWIKUMIwqxEtgHOs5c=
 github.com/form3tech-oss/jwt-go v3.2.3+incompatible/go.mod h1:pbq4aXjuKjdthFRnoDwaVPLA+WlJuPGy+QneDUgJi2k=
 github.com/frankban/quicktest v1.11.3/go.mod h1:wRf/ReqHper53s+kmmSZizM8NamnL3IM0I9ntUbOk+k=
-github.com/fromanirh/cpumgrx v0.0.9 h1:bssIqx5t/QyHem4OtrrPS31l/0XQEDJuUrFkc2sXdtE=
-github.com/fromanirh/cpumgrx v0.0.9/go.mod h1:1ybR6aKqHblqRMiYRkBEzbim51nb3mad2+Ksd02PKuE=
+github.com/fromanirh/cpumgrx v0.0.10 h1:H4wTHqiPoP+NGzsIEYGkpngOuzvuANNVb2Pkeae7cWg=
+github.com/fromanirh/cpumgrx v0.0.10/go.mod h1:1ybR6aKqHblqRMiYRkBEzbim51nb3mad2+Ksd02PKuE=
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
 github.com/fsnotify/fsnotify v1.4.9 h1:hsms1Qyu0jgnwNXIxa+/V/PDsU6CfLf6CNO8H7IWoS4=
 github.com/fsnotify/fsnotify v1.4.9/go.mod h1:znqG4EE+3YCdAaPaxE2ZRY/06pZUdp0tY4IgpuI1SZQ=

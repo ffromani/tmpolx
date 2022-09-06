@@ -3,7 +3,7 @@ module github.com/fromanirh/tmpolx
 go 1.18
 
 require (
-	github.com/fromanirh/cpumgrx v0.0.9
+	github.com/fromanirh/cpumgrx v0.0.10
 	github.com/spf13/pflag v1.0.5
 	k8s.io/klog/v2 v2.60.1
 	k8s.io/kubernetes v1.24.4
