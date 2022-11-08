@@ -101,8 +101,8 @@ github.com/euank/go-kmsg-parser v2.0.0+incompatible/go.mod h1:MhmAMZ8V4CYH4ybgdR
 github.com/evanphx/json-patch v4.12.0+incompatible h1:4onqiflcdA9EOZ4RxV643DvftH5pOlLGNtQ5lPWQu84=
 github.com/evanphx/json-patch v4.12.0+incompatible/go.mod h1:50XU6AFN0ol/bzJsmQLiYLvXMP4fmwYFNcr97nuDLSk=
 github.com/frankban/quicktest v1.11.3/go.mod h1:wRf/ReqHper53s+kmmSZizM8NamnL3IM0I9ntUbOk+k=
-github.com/fromanirh/cpumgrx v0.0.11 h1:vPx+DJUM6Vswu7+fZT8Z5JfuNJeuk11QFMO771FSHbc=
-github.com/fromanirh/cpumgrx v0.0.11/go.mod h1:b5sopUPboJjGKrhh9qJWdTRirDG9gAhDCPI6FCb+lKc=
+github.com/fromanirh/cpumgrx v0.0.12 h1:85k0HajlF/rwXq7Arub7a1jo9fc9Fypr6JqWhxQPwR8=
+github.com/fromanirh/cpumgrx v0.0.12/go.mod h1:b5sopUPboJjGKrhh9qJWdTRirDG9gAhDCPI6FCb+lKc=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/go-gl/glfw v0.0.0-20190409004039-e6da0acd62b1/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=
 github.com/go-gl/glfw/v3.3/glfw v0.0.0-20191125211704-12ad95a8df72/go.mod h1:tQ2UAYgL5IevRw8kRxooKSPJfGvJ9fJQFa0TUsXzTg8=
